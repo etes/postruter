@@ -571,10 +571,9 @@ hr {
 #selectDay {
     position: absolute;
     top: 15px;
-    right: 150px;
-    width: 30px;
-    height: 30px;
+    right: 90px;
 }
+
 #btnLocate {
     position: absolute;
     top: 10px;

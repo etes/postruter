@@ -708,10 +708,13 @@ define([
             this._processDestinationFeatures();
         },
 
-        // Reset App
+        // Select day
         _selectDay: function (e) {
           var value = e.currentTarget.value;
           switch (value) {
+            case "choose":
+              this.queryDay = "1=1";
+              break;
             case "monday":
               this.queryDay = "Dag Like '%1%'";
               break;

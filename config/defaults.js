@@ -42,8 +42,8 @@ define({
     // **************************** //
     // ** UI SPECIFIC PARAMETERS ** //
     "color" : "#006190",
-    "title" : "Find Nearest",
-    "prompt" : "Enter address",
+    "title" : "Postruter",
+    "prompt" : "Søk start adresse",
     "styleBasemap" : 1,
     // **************************** //
 
