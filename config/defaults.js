@@ -55,7 +55,7 @@ define({
     "address" : null,
     "destLayer" : null,
     "destObjectId" : null,
-    "distanceUnits": "miles", // options: miles or kilometers
+    "distanceUnits": "kilometers", // options: miles or kilometers
     "defaultZoomLevel" : 13,
     // **************************** //
 

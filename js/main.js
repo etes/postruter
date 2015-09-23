@@ -116,6 +116,7 @@ define([
         opFeatures: [],
         hiLayer: null,
         destLayer: null,
+        queryDay: null,
         origin: null,
         originObj: null,
         geocoder: null,
@@ -670,6 +671,10 @@ define([
             }
             on(btnReverse, "click", lang.hitch(this, this._reverseDirections));
 
+            // Select day
+            var listDay = dom.byId("listDay");
+            on(listDay, "change", lang.hitch(this, this._selectDay));
+
         },
 
         // Update Theme
@@ -683,6 +688,33 @@ define([
             this._unselectRecords();
             this._updateOrigin(null, null);
             this._processDestinationFeatures();
+        },
+
+        // Reset App
+        _selectDay: function (e) {
+          var value = e.currentTarget.value;
+          switch (value) {
+            case "monday":
+              this.queryDay = "Dag Like '%1%'";
+              break;
+            case "tuesday":
+              this.queryDay = "Dag Like '%2%'";
+              break;
+            case "wednesday":
+              this.queryDay = "Dag Like '%3%'";
+              break;
+            case "thursday":
+              this.queryDay = "Dag Like '%4%'";
+              break;
+            case "friday":
+              this.queryDay = "Dag Like '%5%'";
+              break;
+          }
+          //console.log(this.queryDay);
+          this._queryDestinations();
+          this._processDestinationFeatures();
+
+
         },
 
         // Close Directions
@@ -785,10 +817,12 @@ define([
         // ** QUERY FUNCTIONS ** //
         // Query Destinations
         _queryDestinations: function () {
+
             var expr = "1=1";
-            // if (this.opLayerObj.layerDefinition && this.opLayerObj.layerDefinition.definitionExpression) {
-            // expr = this.opLayerObj.layerDefinition.definitionExpression;
-            // }
+            if (this.queryDay) {
+              expr = this.queryDay;
+            }
+            
             var query = new Query();
             query.returnGeometry = true;
             query.where = expr;
