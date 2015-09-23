@@ -57,7 +57,8 @@ define([
   "esri/symbols/TextSymbol",
   "esri/tasks/locator",
   "esri/tasks/query",
-  "esri/urlUtils"
+  "esri/urlUtils",
+  '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.3/proj4.js'
 ], function (
     ready,
     array,
@@ -100,7 +101,8 @@ define([
     TextSymbol,
     Locator,
     Query,
-    urlUtils
+    urlUtils,
+    proj4
     ) {
     return declare(null, {
 
@@ -130,6 +132,9 @@ define([
         curStops: [],
         dirOK: true,
         animTimer: null,
+        proj4Wkid : 25832,
+        _projection: null,
+        _projectionLoaded: false,
 
         // Startup
         startup: function (config) {
@@ -170,6 +175,19 @@ define([
                     // });
                     // }
                 }
+
+                 window.Proj4js = proj4;
+                 require(['http://spatialreference.org/ref/epsg/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function () {
+                   this._projectionLoaded = true;
+                   this._projection = 'EPSG' + ':' + this.proj4Wkid;
+                 }));
+
+                  /*
+                  require(['//epsg.io/' + wkid + '.js'], lang.hitch(this, function () {
+                    this._projectionLoaded = true;
+                    this._projection = 'EPSG' + ':' + this.proj4Wkid;
+                  }));*/
+
                 // document ready
                 ready(lang.hitch(this, function () {
                     //supply either the webmap id or, if available, the item info
@@ -710,7 +728,7 @@ define([
               this.queryDay = "Dag Like '%5%'";
               break;
           }
-          //console.log(this.queryDay);
+
           this._queryDestinations();
           this._processDestinationFeatures();
 
@@ -822,7 +840,7 @@ define([
             if (this.queryDay) {
               expr = this.queryDay;
             }
-            
+
             var query = new Query();
             query.returnGeometry = true;
             query.where = expr;
@@ -849,6 +867,11 @@ define([
             console.log(err.message);
         },
 
+        _project: function (pnt) {
+            return proj4(proj4.defs[this._projection]).inverse([pnt.x, pnt.y]);
+
+        },
+
         // Process Destination
         _processDestinationFeatures: function () {
             array.forEach(this.opFeatures, lang.hitch(this, function (gra) {
@@ -857,9 +880,16 @@ define([
                 if (geom.type != "point") pt = this._getPointForGeometry(geom);
                 var dist = null;
                 dist = this._getDistance(pt);
+
+                if(this._projectionLoaded) {
+                  lonlat = this._project(pt);
+                  gra.attributes.LATITUDE = lonlat[1];
+                  gra.attributes.LONGITUDE = lonlat[0];
+                }
                 gra.attributes.POINT_LOCATION = pt;
                 gra.attributes.DISTANCE = dist;
                 gra.setInfoTemplate(this.infoTemplate);
+                //console.log(gra);
             }));
             this.opFeatures.sort(this._compareDistance);
             this._updateDestinations();
