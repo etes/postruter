@@ -43,7 +43,7 @@ define({
     // ** UI SPECIFIC PARAMETERS ** //
     "color" : "#006190",
     "title" : "Postruter",
-    "prompt" : "Søk start adresse",
+    /*"prompt" : "Finn adresse eller sted",*/
     "styleBasemap" : 1,
     // **************************** //
 
@@ -61,7 +61,7 @@ define({
 
     // **************************** //
     // ** UTILITY PARAMETERS     ** //
-    "routeUtility" : "http://kart.fredrikstad.kommune.no/arcgis/rest/services/Felles/ATPNettverk/NAServer/Route",
+    "routeUtility" : "//kart.fredrikstad.kommune.no/arcgis/rest/services/Felles/ATPNettverk/NAServer/Route",
 
     // **************************** //
 
