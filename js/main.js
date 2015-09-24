@@ -567,10 +567,18 @@ define([
                 //configuredSearchLayers: configuredSearchLayers
             });
             var searchOptions = searchSources.createOptions();
+<<<<<<< HEAD
             array.forEach(searchOptions.sources, lang.hitch(this, function(source){
                 source.placeholder = this.config.prompt;
             }));
             searchOptions.allPlaceholder = this.config.prompt;
+=======
+
+            /*array.forEach(searchOptions.sources, lang.hitch(this, function(source){
+                source.placeholder = this.config.prompt;
+            }));
+            searchOptions.allPlaceholder = this.config.prompt;*/
+>>>>>>> ad2b6cdcf139881cb2f95da025a84568d40c3fdd
             this.search = new Search(searchOptions, "panelGeocoder");
 
             this.search.on("search-results", lang.hitch(this, function (event) {
@@ -943,6 +951,23 @@ define([
 
                 recHeaderInfo.innerHTML = info;
 
+<<<<<<< HEAD
+=======
+                // Navigate in Google Map
+                var tipNav = "Navigate in Google Maps";
+                if (this.config && this.config.i18n) {
+                    tip = this.config.i18n.tooltips.navigate;
+                }
+                if (gra.attributes.LATITUDE && gra.attributes.LONGITUDE) {
+                    var recNavigate = domConstruct.create("div", {
+                        title: tipNav
+                    }, recHeader);
+                    domClass.add(recNavigate, 'recNavigate');
+                    recNavigate.select = lang.hitch(this, this._googleNavigate);
+                    on(recNavigate, "click", lang.partial(recNavigate.select, [gra.attributes.LATITUDE,gra.attributes.LONGITUDE]));
+                }
+
+>>>>>>> ad2b6cdcf139881cb2f95da025a84568d40c3fdd
                 // route
                 var tip = "Directions";
                 if (this.config && this.config.i18n) {
@@ -1029,6 +1054,25 @@ define([
             }));
         },
 
+<<<<<<< HEAD
+=======
+        // Navigate in Google Map
+        _googleNavigate: function (latlon) {
+          var latitude = latlon[0];
+          var longitude = latlon[1];
+
+          // If it's an iPad, iPhone etc..
+          if( (navigator.platform.indexOf("iPad") != -1)
+              || (navigator.platform.indexOf("iPhone") != -1)
+              || (navigator.platform.indexOf("iPod") != -1))
+              window.open('maps://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
+          else
+              window.open('http://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
+
+          console.log(navigator);
+        },
+
+>>>>>>> ad2b6cdcf139881cb2f95da025a84568d40c3fdd
         // Show Route
         _showRoute: function (num) {
             var zoom = true;
