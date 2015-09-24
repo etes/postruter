@@ -16,91 +16,93 @@
  | limitations under the License.
  */
 define([
-  "dojo/ready", 
-  "dojo/_base/array", 
-  "dojo/_base/Color", 
-  "dojo/_base/declare", 
-  "dojo/_base/event", 
-  "dojo/_base/fx", 
-  "dojo/_base/html", 
-  "dojo/_base/lang", 
-  "dojo/dom", 
-  "dojo/dom-attr", 
-  "dojo/dom-class", 
-  "dojo/dom-construct", 
-  "dojo/dom-style", 
-  "dojo/on", 
-  "dojo/query", 
-  "dijit/layout/ContentPane", 
-  "dijit/registry", 
-  "application/SearchSources", 
-  "application/TrackingPt", 
-  "esri/IdentityManager", 
-  "esri/arcgis/utils", 
-  "esri/dijit/Directions", 
-  "esri/dijit/Geocoder", 
-  "esri/dijit/LocateButton", 
-  "esri/dijit/Popup", 
-  "esri/dijit/Search", 
-  "esri/geometry/mathUtils", 
-  "esri/geometry/Point", 
-  "esri/graphic", 
-  "esri/InfoTemplate", 
-  "esri/lang", 
-  "esri/layers/GraphicsLayer", 
-  "esri/symbols/Font", 
-  "esri/symbols/CartographicLineSymbol", 
-  "esri/symbols/PictureMarkerSymbol", 
-  "esri/symbols/SimpleFillSymbol", 
-  "esri/symbols/SimpleLineSymbol", 
-  "esri/symbols/SimpleMarkerSymbol", 
-  "esri/symbols/TextSymbol", 
-  "esri/tasks/locator", 
-  "esri/tasks/query", 
-  "esri/urlUtils"
+  "dojo/ready",
+  "dojo/_base/array",
+  "dojo/_base/Color",
+  "dojo/_base/declare",
+  "dojo/_base/event",
+  "dojo/_base/fx",
+  "dojo/_base/html",
+  "dojo/_base/lang",
+  "dojo/dom",
+  "dojo/dom-attr",
+  "dojo/dom-class",
+  "dojo/dom-construct",
+  "dojo/dom-style",
+  "dojo/on",
+  "dojo/query",
+  "dijit/layout/ContentPane",
+  "dijit/registry",
+  "application/SearchSources",
+  "application/TrackingPt",
+  "esri/IdentityManager",
+  "esri/arcgis/utils",
+  "esri/dijit/Directions",
+  "esri/dijit/Geocoder",
+  "esri/dijit/LocateButton",
+  "esri/dijit/Popup",
+  "esri/dijit/Search",
+  "esri/geometry/mathUtils",
+  "esri/geometry/Point",
+  "esri/graphic",
+  "esri/InfoTemplate",
+  "esri/lang",
+  "esri/layers/GraphicsLayer",
+  "esri/symbols/Font",
+  "esri/symbols/CartographicLineSymbol",
+  "esri/symbols/PictureMarkerSymbol",
+  "esri/symbols/SimpleFillSymbol",
+  "esri/symbols/SimpleLineSymbol",
+  "esri/symbols/SimpleMarkerSymbol",
+  "esri/symbols/TextSymbol",
+  "esri/tasks/locator",
+  "esri/tasks/query",
+  "esri/urlUtils",
+  '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.3/proj4.js'
 ], function (
-    ready, 
-    array, 
-    Color, 
-    declare, 
+    ready,
+    array,
+    Color,
+    declare,
     event,
-    fx, 
-    html, 
-    lang, 
-    dom, 
-    domAttr, 
-    domClass, 
-    domConstruct, 
-    domStyle, 
-    on, 
-    query, 
-    ContentPane, 
+    fx,
+    html,
+    lang,
+    dom,
+    domAttr,
+    domClass,
+    domConstruct,
+    domStyle,
+    on,
+    query,
+    ContentPane,
     registry,
-    SearchSources, 
-    TrackingPt, 
-    esriId, 
-    arcgisUtils, 
-    Directions, 
-    Geocoder, 
-    LocateButton, 
-    Popup, 
-    Search, 
-    mathUtils, 
-    Point, 
-    Graphic, 
-    InfoTemplate, 
-    esriLang, 
-    GraphicsLayer, 
-    Font, 
-    CartographicLineSymbol, 
-    PictureMarkerSymbol, 
-    SimpleFillSymbol, 
-    SimpleLineSymbol, 
-    SimpleMarkerSymbol, 
-    TextSymbol, 
-    Locator, 
-    Query, 
-    urlUtils
+    SearchSources,
+    TrackingPt,
+    esriId,
+    arcgisUtils,
+    Directions,
+    Geocoder,
+    LocateButton,
+    Popup,
+    Search,
+    mathUtils,
+    Point,
+    Graphic,
+    InfoTemplate,
+    esriLang,
+    GraphicsLayer,
+    Font,
+    CartographicLineSymbol,
+    PictureMarkerSymbol,
+    SimpleFillSymbol,
+    SimpleLineSymbol,
+    SimpleMarkerSymbol,
+    TextSymbol,
+    Locator,
+    Query,
+    urlUtils,
+    proj4
     ) {
     return declare(null, {
 
@@ -116,6 +118,7 @@ define([
         opFeatures: [],
         hiLayer: null,
         destLayer: null,
+        queryDay: null,
         origin: null,
         originObj: null,
         geocoder: null,
@@ -129,6 +132,9 @@ define([
         curStops: [],
         dirOK: true,
         animTimer: null,
+        proj4Wkid : 25832,
+        _projection: null,
+        _projectionLoaded: false,
 
         // Startup
         startup: function (config) {
@@ -169,6 +175,19 @@ define([
                     // });
                     // }
                 }
+
+                 window.Proj4js = proj4;
+                 require(['http://spatialreference.org/ref/epsg/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function () {
+                   this._projectionLoaded = true;
+                   this._projection = 'EPSG' + ':' + this.proj4Wkid;
+                 }));
+
+                  /*
+                  require(['//epsg.io/' + wkid + '.js'], lang.hitch(this, function () {
+                    this._projectionLoaded = true;
+                    this._projection = 'EPSG' + ':' + this.proj4Wkid;
+                  }));*/
+
                 // document ready
                 ready(lang.hitch(this, function () {
                     //supply either the webmap id or, if available, the item info
@@ -538,7 +557,7 @@ define([
 
             // geocoder
             var geocoderOptions = this._createGeocoderOptions();
-            
+
             // search
             var searchSources = new SearchSources({
                 map: this.map,
@@ -595,7 +614,7 @@ define([
 
 
             if (this.config.helperServices.route && this.config.helperServices.route.url !== "") {
-                // do we have a proxied url? 
+                // do we have a proxied url?
                 var routeUrl = null;
                 array.some(this.config.layerMixins, lang.hitch(this, function (layerMixin) {
                     if (layerMixin.url === this.config.helperServices.route.url) {
@@ -670,6 +689,10 @@ define([
             }
             on(btnReverse, "click", lang.hitch(this, this._reverseDirections));
 
+            // Select day
+            var listDay = dom.byId("listDay");
+            on(listDay, "change", lang.hitch(this, this._selectDay));
+
         },
 
         // Update Theme
@@ -683,6 +706,36 @@ define([
             this._unselectRecords();
             this._updateOrigin(null, null);
             this._processDestinationFeatures();
+        },
+
+        // Select day
+        _selectDay: function (e) {
+          var value = e.currentTarget.value;
+          switch (value) {
+            case "choose":
+              this.queryDay = "1=1";
+              break;
+            case "monday":
+              this.queryDay = "Dag Like '%1%'";
+              break;
+            case "tuesday":
+              this.queryDay = "Dag Like '%2%'";
+              break;
+            case "wednesday":
+              this.queryDay = "Dag Like '%3%'";
+              break;
+            case "thursday":
+              this.queryDay = "Dag Like '%4%'";
+              break;
+            case "friday":
+              this.queryDay = "Dag Like '%5%'";
+              break;
+          }
+
+          this._queryDestinations();
+          this._processDestinationFeatures();
+
+
         },
 
         // Close Directions
@@ -785,10 +838,12 @@ define([
         // ** QUERY FUNCTIONS ** //
         // Query Destinations
         _queryDestinations: function () {
+
             var expr = "1=1";
-            // if (this.opLayerObj.layerDefinition && this.opLayerObj.layerDefinition.definitionExpression) {
-            // expr = this.opLayerObj.layerDefinition.definitionExpression;
-            // }
+            if (this.queryDay) {
+              expr = this.queryDay;
+            }
+
             var query = new Query();
             query.returnGeometry = true;
             query.where = expr;
@@ -815,6 +870,11 @@ define([
             console.log(err.message);
         },
 
+        _project: function (pnt) {
+            return proj4(proj4.defs[this._projection]).inverse([pnt.x, pnt.y]);
+
+        },
+
         // Process Destination
         _processDestinationFeatures: function () {
             array.forEach(this.opFeatures, lang.hitch(this, function (gra) {
@@ -823,9 +883,16 @@ define([
                 if (geom.type != "point") pt = this._getPointForGeometry(geom);
                 var dist = null;
                 dist = this._getDistance(pt);
+
+                if(this._projectionLoaded) {
+                  lonlat = this._project(pt);
+                  gra.attributes.LATITUDE = lonlat[1];
+                  gra.attributes.LONGITUDE = lonlat[0];
+                }
                 gra.attributes.POINT_LOCATION = pt;
                 gra.attributes.DISTANCE = dist;
                 gra.setInfoTemplate(this.infoTemplate);
+                //console.log(gra);
             }));
             this.opFeatures.sort(this._compareDistance);
             this._updateDestinations();
@@ -1054,9 +1121,9 @@ define([
             var pt = gra.attributes.POINT_LOCATION;
             if (zoom) {
                 var c = pt;
-                if (this.map.width > 570) {
+                /*if (this.map.width > 570) {
                     c = pt.offset(this.offset / 2, 0);
-                }
+                }*/
                 this.map.centerAndZoom(c, this.config.defaultZoomLevel || 13);
             }
             var rgb = Color.fromString(this.color).toRgb();
@@ -1259,7 +1326,7 @@ define([
         },
         _setLevel: function (options) {
             var level = this.config.level;
-            //specify center and zoom if provided as url params 
+            //specify center and zoom if provided as url params
             if (level) {
                 options.zoom = level;
             }

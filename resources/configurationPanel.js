@@ -7,7 +7,7 @@
                     "type": "appproxies",
                     "serviceProxies": [
                         {
-                            "url": "http://route.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World",
+                            "url": "http://kart.fredrikstad.kommune.no/arcgis/rest/services/Felles/ATPNettverk/NAServer/Route",
                             "title": "Route"
                         }
                     ]

@@ -87,7 +87,7 @@ hr {
     box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
     -ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=10, Direction=135, Color='#000000')";
 }
-
+/*
 .esriSimpleSlider div {
     width: 19px;
     height: 19px;
@@ -96,7 +96,7 @@ hr {
     font-weight: bold;
     line-height: 19px;
     -webkit-user-select: none;
-}
+}*/
 
 .esriSimpleSliderTL {
     top: 10px;
@@ -567,6 +567,11 @@ hr {
 #panelGeocoder {
     position: absolute;
     width: 100%;
+}
+#selectDay {
+    position: absolute;
+    top: 15px;
+    right: 90px;
 }
 
 #btnLocate {

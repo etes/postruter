@@ -19,7 +19,7 @@ define({
     //Default configuration settings for the application. This is where you'll define things like a bing maps key,
     //default web map, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
     "appid": "",
-    "webmap": "b007e3561ff94591b68575e974882e4d", //"e37d8f3624734cf5ac9b7d6f4eaac75c", //"9569a8b938c746359c1b4aa490476506", 
+    "webmap": "b885e23e4af74fba8a8f6008646a90b9", //"e37d8f3624734cf5ac9b7d6f4eaac75c", //"9569a8b938c746359c1b4aa490476506",
     "oauthappid": null, //"AFTKRmv16wj14N3z",
     //Group templates must support a group url parameter. This will contain the id of the group.
     //group: "",
@@ -38,15 +38,15 @@ define({
     //to show how to setup the strings file.
     "localize": true,
     "units": null,
-    
+
     // **************************** //
     // ** UI SPECIFIC PARAMETERS ** //
-    "color" : "#80ab00",
-    "title" : "Find Nearest",
-    "prompt" : "Enter address",
+    "color" : "#006190",
+    "title" : "Postruter",
+    "prompt" : "Søk start adresse",
     "styleBasemap" : 1,
     // **************************** //
-    
+
     // **************************** //
     // ** TEMPLATE PARAMETERS    ** //
     "destination" : "",
@@ -55,17 +55,17 @@ define({
     "address" : null,
     "destLayer" : null,
     "destObjectId" : null,
-    "distanceUnits": "miles", // options: miles or kilometers
+    "distanceUnits": "kilometers", // options: miles or kilometers
     "defaultZoomLevel" : 13,
     // **************************** //
-    
+
     // **************************** //
     // ** UTILITY PARAMETERS     ** //
-    "routeUtility" : "",
-    
+    "routeUtility" : "http://kart.fredrikstad.kommune.no/arcgis/rest/services/Felles/ATPNettverk/NAServer/Route",
+
     // **************************** //
-    
-    
+
+
     //This option demonstrates how to handle additional custom url parameters. For example
     //if you want users to be able to specify lat/lon coordinates that define the map's center or
     //specify an alternate basemap via a url parameter.
