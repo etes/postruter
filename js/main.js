@@ -567,18 +567,13 @@ define([
                 //configuredSearchLayers: configuredSearchLayers
             });
             var searchOptions = searchSources.createOptions();
-<<<<<<< HEAD
-            array.forEach(searchOptions.sources, lang.hitch(this, function(source){
-                source.placeholder = this.config.prompt;
-            }));
-            searchOptions.allPlaceholder = this.config.prompt;
-=======
+
 
             /*array.forEach(searchOptions.sources, lang.hitch(this, function(source){
                 source.placeholder = this.config.prompt;
             }));
             searchOptions.allPlaceholder = this.config.prompt;*/
->>>>>>> ad2b6cdcf139881cb2f95da025a84568d40c3fdd
+
             this.search = new Search(searchOptions, "panelGeocoder");
 
             this.search.on("search-results", lang.hitch(this, function (event) {
@@ -1060,7 +1055,7 @@ define([
           if( (navigator.platform.indexOf("iPad") != -1)
               || (navigator.platform.indexOf("iPhone") != -1)
               || (navigator.platform.indexOf("iPod") != -1))
-              window.open('maps://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
+              window.open('http://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
           else
               window.open('http://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
 
