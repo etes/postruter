@@ -951,8 +951,6 @@ define([
 
                 recHeaderInfo.innerHTML = info;
 
-<<<<<<< HEAD
-=======
                 // Navigate in Google Map
                 var tipNav = "Navigate in Google Maps";
                 if (this.config && this.config.i18n) {
@@ -967,7 +965,6 @@ define([
                     on(recNavigate, "click", lang.partial(recNavigate.select, [gra.attributes.LATITUDE,gra.attributes.LONGITUDE]));
                 }
 
->>>>>>> ad2b6cdcf139881cb2f95da025a84568d40c3fdd
                 // route
                 var tip = "Directions";
                 if (this.config && this.config.i18n) {
@@ -1054,8 +1051,6 @@ define([
             }));
         },
 
-<<<<<<< HEAD
-=======
         // Navigate in Google Map
         _googleNavigate: function (latlon) {
           var latitude = latlon[0];
@@ -1072,7 +1067,6 @@ define([
           console.log(navigator);
         },
 
->>>>>>> ad2b6cdcf139881cb2f95da025a84568d40c3fdd
         // Show Route
         _showRoute: function (num) {
             var zoom = true;
