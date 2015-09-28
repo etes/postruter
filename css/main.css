@@ -713,7 +713,7 @@ hr {
 
 .recNum {
     float: left;
-    margin: 10px;
+    margin: 5px;
     width: 30px;
     height: 30px;
     text-align: center;
@@ -727,7 +727,7 @@ hr {
 
 .recHeaderInfo {
     float: left;
-    margin: 10px 0 10px 0;
+    margin: 5px 0 5px 0;
     width: 190px;
     width: calc(100% - 110px);
     /*min-width: 190px;*/
@@ -748,9 +748,9 @@ hr {
 
 .recNavigate {
     float: left;
-    margin: 5px 0 5px -60px;
-    width: 40px;
-    height: 40px;
+    margin: 20px 0 5px -50px;
+    width: 30px;
+    height: 30px;
     background-image: url('../images/navigationGoogle.png');
     background-repeat: no-repeat;
     background-position: center center;
@@ -758,9 +758,9 @@ hr {
 }
 .recRoute {
     float: left;
-    margin: 5px 0 5px 0;
-    width: 40px;
-    height: 40px;
+    margin: 20px 0 5px 0;
+    width: 30px;
+    height: 30px;
     background-image: url('../images/route.png');
     background-repeat: no-repeat;
     background-position: center center;
