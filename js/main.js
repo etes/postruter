@@ -662,6 +662,7 @@ define([
           var e = {graphic: null};
           e.graphic = new Graphic(pt);
           this._geoLocated(e);
+          this.map.centerAndZoom(pt, 8);
         },
 
         // Configure UI
@@ -1191,7 +1192,7 @@ define([
                 /*if (this.map.width > 570) {
                     c = pt.offset(this.offset / 2, 0);
                 }*/
-                this.map.centerAndZoom(c, this.config.defaultZoomLevel || 13);
+                this.map.centerAndZoom(c, this.config.defaultZoomLevel || 10);
             }
             var rgb = Color.fromString(this.color).toRgb();
             rgb.push(0.4);
