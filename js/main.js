@@ -135,12 +135,14 @@ define([
         proj4Wkid : 25832,
         _projection: null,
         _projectionLoaded: false,
+        watchId: null,
 
         // Startup
         startup: function (config) {
             // config will contain application and user defined info for the template such as i18n strings, the web map id
             // and application id
             // any url parameters and any application specific configuration information.
+
             if (config) {
                 this.config = config;
                 this._setColor();
@@ -176,17 +178,12 @@ define([
                     // }
                 }
 
-                 window.Proj4js = proj4;
-                 require(['http://spatialreference.org/ref/epsg/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function () {
-                   this._projectionLoaded = true;
-                   this._projection = 'EPSG' + ':' + this.proj4Wkid;
-                 }));
+                window.Proj4js = proj4;
+                require(['http://spatialreference.org/ref/epsg/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function () {
+                  this._projectionLoaded = true;
+                  this._projection = 'EPSG' + ':' + this.proj4Wkid;
+                }));
 
-                  /*
-                  require(['//epsg.io/' + wkid + '.js'], lang.hitch(this, function () {
-                    this._projectionLoaded = true;
-                    this._projection = 'EPSG' + ':' + this.proj4Wkid;
-                  }));*/
 
                 // document ready
                 ready(lang.hitch(this, function () {
@@ -649,6 +646,22 @@ define([
             // update theme
             this._updateTheme();
 
+            if( navigator.geolocation ) {
+              var zoomTo = lang.hitch(this, this._zoomToLocation);
+              navigator.geolocation.getCurrentPosition(zoomTo, this._locationError);
+              //watchId = navigator.geolocation.watchPosition(showLocation, locationError);
+            } else {
+              alert("Browser doesn't support Geolocation. Visit http://caniuse.com/#feat=geolocation to see browser support for the Geolocation API.");
+            }
+
+        },
+
+        _zoomToLocation: function (location) {
+          xy = proj4(proj4.defs[this._projection]).forward([location.coords.longitude, location.coords.latitude]);
+          var pt = new Point(xy[0], xy[1], this.map.spatialReference);
+          var e = {graphic: null};
+          e.graphic = new Graphic(pt);
+          this._geoLocated(e);
         },
 
         // Configure UI
@@ -819,6 +832,30 @@ define([
             this._updateOrigin(gra, pt);
         },
 
+        _locationError: function (error) {
+          //error occurred so stop watchPosition
+          if( navigator.geolocation ) {
+            navigator.geolocation.clearWatch(this.watchId);
+          }
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              alert("Location not provided");
+              break;
+
+            case error.POSITION_UNAVAILABLE:
+              alert("Current location not available");
+              break;
+
+            case error.TIMEOUT:
+              alert("Timeout");
+              break;
+
+            default:
+              alert("unknown error");
+              break;
+          }
+        },
+
         // search select
         _searchSelect: function (obj) {
             var result = obj.result;
@@ -873,9 +910,8 @@ define([
             console.log(err.message);
         },
 
-        _project: function (pnt) {
+        _toLatLong: function (pnt) {
             return proj4(proj4.defs[this._projection]).inverse([pnt.x, pnt.y]);
-
         },
 
         // Process Destination
@@ -888,7 +924,7 @@ define([
                 dist = this._getDistance(pt);
 
                 if(this._projectionLoaded) {
-                  lonlat = this._project(pt);
+                  lonlat = this._toLatLong(pt);
                   gra.attributes.LATITUDE = lonlat[1];
                   gra.attributes.LONGITUDE = lonlat[0];
                 }
@@ -1058,8 +1094,6 @@ define([
               window.open('http://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
           else
               window.open('http://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
-
-          console.log(navigator);
         },
 
         // Show Route
@@ -1264,7 +1298,7 @@ define([
                     if (this.opFeatures.length > 0) {
                         var num = 0;
                         if (this.selectedNum) num = this.selectedNum;
-                        this._showRoute(num);
+                        //this._showRoute(num);
                     }
                 }
             }));
