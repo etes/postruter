@@ -733,19 +733,19 @@ define([
               this.queryDay = "1=1";
               break;
             case "monday":
-              this.queryDay = "Dag Like '%1%'";
+              this.queryDay = "Dag Like '%Mandag%'";
               break;
             case "tuesday":
-              this.queryDay = "Dag Like '%2%'";
+              this.queryDay = "Dag Like '%Tirsdag%'";
               break;
             case "wednesday":
-              this.queryDay = "Dag Like '%3%'";
+              this.queryDay = "Dag Like '%Onsdag%'";
               break;
             case "thursday":
-              this.queryDay = "Dag Like '%4%'";
+              this.queryDay = "Dag Like '%Torsdag%'";
               break;
             case "friday":
-              this.queryDay = "Dag Like '%5%'";
+              this.queryDay = "Dag Like '%Fredag%'";
               break;
           }
 
