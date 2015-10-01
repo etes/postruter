@@ -647,7 +647,7 @@ define([
             this._updateTheme();
 
             if( navigator.geolocation ) {
-              var zoomTo = lang.hitch(this, this._zoomToLocation);
+              var zoomTo = lang.hitch(this, this._currentLocation);
               navigator.geolocation.getCurrentPosition(zoomTo, this._locationError);
               //watchId = navigator.geolocation.watchPosition(showLocation, locationError);
             } else {
@@ -656,13 +656,13 @@ define([
 
         },
 
-        _zoomToLocation: function (location) {
+        _currentLocation: function (location) {
           xy = proj4(proj4.defs[this._projection]).forward([location.coords.longitude, location.coords.latitude]);
           var pt = new Point(xy[0], xy[1], this.map.spatialReference);
           var e = {graphic: null};
           e.graphic = new Graphic(pt);
           this._geoLocated(e);
-          this.map.centerAndZoom(pt, 8);
+          //this.map.centerAndZoom(pt, 8);
         },
 
         // Configure UI
