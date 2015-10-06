@@ -47,14 +47,22 @@
                     <div id="selectDay">
                       <select id="listDay">
                         <option value="choose" selected="selected">Velg dag ... </option>
-                        <option value="monday">Mandag</option>
-                        <option value="tuesday">Tirsdag</option>
-                        <option value="wednesday">Onsdag</option>
-                        <option value="thursday">Torsdag</option>
-                        <option value="friday">Fredag</option>
+                        <option value="1">Mandag</option>
+                        <option value="2">Tirsdag</option>
+                        <option value="3">Onsdag</option>
+                        <option value="4">Torsdag</option>
+                        <option value="5">Fredag</option>
                       </select>
                     </div>
-                    <div id="btnDay" class="dropdown"></div>
+                    <div id="selectRegion">
+                      <select id="listRegion">
+                        <option value="choose" selected="selected">Velg rute ... </option>
+                        <option value="1">Blå</option>
+                        <option value="2">Rød</option>
+                        <option value="3">Sentrum</option>
+                      </select>
+                    </div>
+                    <!--<div id="btnDay" class="dropdown"></div>-->
                     <div id="btnLocate"></div>
                     <div id="btnReset" class="btn btnReset"></div>
                 </div>
@@ -81,6 +89,16 @@
         </div>
         <div id="btnToggle" class="btn btnToggle"></div>
     </div>
+
+    <!-- Panel Top -->
+		<div id="panelTop" class="bg rounded shadow">
+
+			<!-- Panel Tools -->
+			<div id="panelTools">
+				<!--Tools are created programatically-->
+			</div>
+		</div>
+
     <script type="text/javascript">
     var package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
     var dojoConfig = {

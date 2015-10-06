@@ -460,6 +460,30 @@ hr {
     bottom: 0px;
 }
 
+#panelTop {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  color: #ffffff;
+  padding: 0px;
+  display: block;
+  overflow: visible;
+  height: auto;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -ms-border-radius: 0;
+  border-radius: 0;
+}
+#panelTools {
+  position: relative;
+  left: 0px;
+  top: 0px;
+  min-height: 30px;
+  width: 100%;
+  display: block;
+  clear: both; }
+
 #panelContent {
     position: absolute;
     right: 0px;
@@ -572,6 +596,12 @@ hr {
     position: absolute;
     top: 15px;
     right: 90px;
+}
+
+#selectRegion {
+    position: absolute;
+    top: 15px;
+    right: 200px;
 }
 
 #btnLocate {
@@ -838,3 +868,16 @@ hr {
         border-radius: 0;
     }
 }
+
+@media only screen and (min-width: 760px) {
+  #panelTop {
+    width: auto;
+    left: 44px;
+    top: 10px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    border-radius: 5px;
+  }
+
+  }

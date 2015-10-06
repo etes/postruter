@@ -119,6 +119,7 @@ define([
         hiLayer: null,
         destLayer: null,
         queryDay: null,
+        queryRegion: null,
         origin: null,
         originObj: null,
         geocoder: null,
@@ -147,6 +148,16 @@ define([
                 this.config = config;
                 this._setColor();
                 this._setProtocolHandler();
+
+                // get current date
+                var date = new Date();
+                this.queryDay= date.getDay();
+                if (this.queryDay == 0 || this.queryDay == 6){
+                  this.queryDay = "choose";
+                }
+                var listDay = dom.byId('listDay');
+                listDay.value = this.queryDay;
+
                 // proxy rules
                 if (this.config.proxyurl !== "") {
                     urlUtils.addProxyRule({
@@ -710,6 +721,9 @@ define([
             var listDay = dom.byId("listDay");
             on(listDay, "change", lang.hitch(this, this._selectDay));
 
+            // Select region
+            var listRegion = dom.byId("listRegion");
+            on(listRegion, "change", lang.hitch(this, this._selectRegion));
         },
 
         // Update Theme
@@ -728,31 +742,20 @@ define([
         // Select day
         _selectDay: function (e) {
           var value = e.currentTarget.value;
-          switch (value) {
-            case "choose":
-              this.queryDay = "1=1";
-              break;
-            case "monday":
-              this.queryDay = "Dag Like '%Mandag%'";
-              break;
-            case "tuesday":
-              this.queryDay = "Dag Like '%Tirsdag%'";
-              break;
-            case "wednesday":
-              this.queryDay = "Dag Like '%Onsdag%'";
-              break;
-            case "thursday":
-              this.queryDay = "Dag Like '%Torsdag%'";
-              break;
-            case "friday":
-              this.queryDay = "Dag Like '%Fredag%'";
-              break;
-          }
-
+          this.queryDay = value;
           this._queryDestinations();
           this._processDestinationFeatures();
+        },
 
-
+        // Select Region
+        _selectRegion: function (e) {
+          var value = e.currentTarget.value;
+          this.queryRegion = value;
+          colors = {"choose": "#006190", 1: "#0055FF", 2: "#900000", 3: "#009000"}
+          this.color = colors[value];
+          this._setColor;
+          this._queryDestinations();
+          this._processDestinationFeatures();
         },
 
         // Close Directions
@@ -771,30 +774,10 @@ define([
                 promise.then(lang.hitch(this, function () {
                     this.dirOK = true;
                 }));
-                // dom.byId("panelTitle").innerHTML = this.config.title;
-                // domStyle.set("bodyFeatures", "display", "block");
-                // domStyle.set("bodyDirections", "display", "none");
-                // domStyle.set("btnClose", "display", "none");
-                // domStyle.set("btnReset", "display", "block");
-                // domStyle.set("panelOrigin", "display", "none");
-                // domStyle.set("panelDestination", "display", "none");
-                // domStyle.set("panelSearchBox", "display", "block");
                 domStyle.set("panelFeatures", "display", "block");
                 domStyle.set("panelDirections", "display", "none");
                 break;
             case 1:
-                // var tip = "Directions";
-                // if (this.config && this.config.i18n) {
-                //     tip = this.config.i18n.tooltips.directions;
-                // }
-                // dom.byId("panelTitle").innerHTML = tip;
-                // domStyle.set("bodyFeatures", "display", "none");
-                // domStyle.set("bodyDirections", "display", "block");
-                // domStyle.set("btnClose", "display", "block");
-                // domStyle.set("btnReset", "display", "none");
-                // domStyle.set("panelOrigin", "display", "block");
-                // domStyle.set("panelDestination", "display", "block");
-                // domStyle.set("panelSearchBox", "display", "none");
                 domStyle.set("panelFeatures", "display", "none");
                 domStyle.set("panelDirections", "display", "block");
                 break;
@@ -880,10 +863,14 @@ define([
         // Query Destinations
         _queryDestinations: function () {
 
-            var expr = "1=1";
-            if (this.queryDay) {
-              expr = this.queryDay;
+            weekdays = {"choose": "", 1: "Mandag", 2: "Tirsdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag"};
+            regions = {"choose": "", 1: "Blå", 2: "Rød", 3: "Sentrum"};
+            if (!this.queryRegion) {
+              this.queryRegion = "choose";
             }
+
+            var expr = "Dag Like '%"+ weekdays[this.queryDay] + "%' and Kategori Like '%"+ regions[this.queryRegion] + "%'";
+            console.log(expr);
 
             var query = new Query();
             query.returnGeometry = true;
@@ -965,6 +952,7 @@ define([
                 }, recHeader);
                 domClass.add(recNum, 'recNum');
                 domClass.add(recNum, 'bg');
+                query(".bg").style("background-color", this.color);
 
                 //headerInfo
                 var recHeaderInfo = domConstruct.create("div", {}, recHeader);
