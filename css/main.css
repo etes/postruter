@@ -131,7 +131,7 @@ hr {
     -moz-border-radius: 15px;
     -o-border-radius: 15px;
     border-radius: 15px;
-    background-size: 24px 24px;
+    background-size: 30px 30px;
 }
 
 .LocateButton .loading {
@@ -524,8 +524,8 @@ hr {
 
 .btn {
     float: left;
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
     margin: 3px;
     opacity: 0.5;
     filter: alpha(opacity=50);
@@ -548,8 +548,8 @@ hr {
 
 .btnReset {
     position: absolute;
-    top: 35px;
-    right: 7px;
+    top: 30px;
+    right: 10px;
     background-image: url('../images/reset.png');
     background-repeat: no-repeat;
 }
@@ -607,8 +607,8 @@ hr {
 
 #btnLocate {
     position: absolute;
-    top: 35px;
-    right: 37px;
+    top: 33px;
+    right: 50px;
     width: 30px;
     height: 30px;
 }

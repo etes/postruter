@@ -952,7 +952,7 @@ define([
                 }, recHeader);
                 domClass.add(recNum, 'recNum');
                 domClass.add(recNum, 'bg');
-                query(".bg").style("background-color", this.color);
+                query(".bg").style("backgroundColor", this.color.toString());
 
                 //headerInfo
                 var recHeaderInfo = domConstruct.create("div", {}, recHeader);
