@@ -30,6 +30,7 @@ select {
  border-radius: 4px;
  font-size: 16px;
  font-family: Lato;
+ height: 30px
 }
 
 .esriRTL label {
@@ -601,13 +602,13 @@ select {
 
 #selectRegion {
     position: absolute;
-    top: 15px;
+    top: 40px;
     left: 10px;
 }
 
 #selectDay {
     position: absolute;
-    top: 15px;
+    top: 40px;
     left: 130px;
 }
 
