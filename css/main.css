@@ -601,13 +601,13 @@ select {
 
 #selectRegion {
     position: absolute;
-    top: 40px;
+    top: 15px;
     left: 10px;
 }
 
 #selectDay {
     position: absolute;
-    top: 40px;
+    top: 15px;
     left: 130px;
 }
 

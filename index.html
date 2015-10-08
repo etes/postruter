@@ -17,6 +17,9 @@
     <link href='//fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//js.arcgis.com/3.14/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="//js.arcgis.com/3.14/esri/css/esri.css">
+    <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <!-- Load any application specific styles -->
     <link rel="stylesheet" href="css/main.css">
 </head>
@@ -44,16 +47,16 @@
                         </div>
                     </div>
                     <!-- Buttons -->
-                    <div id="selectRegion">
-                      <select id="listRegion">
+                    <div id="selectRegion" class="ui-field-contain">
+                      <select id="listRegion" name="select-native-1" data-mini="true">
                         <option value="choose" selected="selected">Velg rute ... </option>
                         <option value="1">Rute 1</option>
                         <option value="2">Rute 2</option>
                         <option value="3">Sentrum</option>
                       </select>
                     </div>
-                    <div id="selectDay">
-                      <select id="listDay">
+                    <div id="selectDay" class="ui-field-contain">
+                      <select id="listDay" name="select-native-1" data-mini="true">
                         <option value="choose" selected="selected">Velg dag ... </option>
                         <option value="1">Mandag</option>
                         <option value="2">Tirsdag</option>
