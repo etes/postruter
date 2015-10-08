@@ -151,12 +151,12 @@ define([
 
                 // get current date
                 var date = new Date();
-                this.queryDay= date.getDay();
+                /*this.queryDay= date.getDay();
                 if (this.queryDay == 0 || this.queryDay == 6){
                   this.queryDay = "choose";
                 }
                 var listDay = dom.byId('listDay');
-                listDay.value = this.queryDay;
+                listDay.value = this.queryDay;*/
 
                 // proxy rules
                 if (this.config.proxyurl !== "") {
@@ -190,7 +190,8 @@ define([
                 }
 
                 window.Proj4js = proj4;
-                require(['http://spatialreference.org/ref/epsg/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function () {
+                //require(['http://spatialreference.org/ref/epsg/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function () {
+                require(['js/25832.js'], lang.hitch(this, function () {
                   this._projectionLoaded = true;
                   this._projection = 'EPSG' + ':' + this.proj4Wkid;
                 }));
@@ -658,13 +659,22 @@ define([
             this._updateTheme();
 
             if( navigator.geolocation ) {
-              var zoomTo = lang.hitch(this, this._currentLocation);
-              navigator.geolocation.getCurrentPosition(zoomTo, this._locationError);
+              var currLoc = lang.hitch(this, this._currentLocation);
+              navigator.geolocation.getCurrentPosition(currLoc, this._locationError);
               //watchId = navigator.geolocation.watchPosition(showLocation, locationError);
             } else {
               alert("Browser doesn't support Geolocation. Visit http://caniuse.com/#feat=geolocation to see browser support for the Geolocation API.");
             }
 
+        },
+
+
+        _zoomToLatLon: function (latlon) {
+          xy = proj4(proj4.defs[this._projection]).forward([latlon[1], latlon[0]]);
+          var pt = new Point(xy[0], xy[1], this.map.spatialReference);
+          var e = {graphic: null};
+          e.graphic = new Graphic(pt);
+          this.map.centerAndZoom(pt, 3);
         },
 
         _currentLocation: function (location) {
@@ -724,6 +734,10 @@ define([
             // Select region
             var listRegion = dom.byId("listRegion");
             on(listRegion, "change", lang.hitch(this, this._selectRegion));
+
+            // Next button
+            var dialogNext = dom.byId("listRegion");
+            on(btnNext, "click", lang.hitch(this, this._zoomToLatLon([59.22, 10.75])));
         },
 
         // Update Theme
@@ -867,6 +881,9 @@ define([
             regions = {"choose": "", 1: "Blå", 2: "Rød", 3: "Sentrum"};
             if (!this.queryRegion) {
               this.queryRegion = "choose";
+            }
+            if (!this.queryDay) {
+              this.queryDay = "choose";
             }
 
             var expr = "Dag Like '%"+ weekdays[this.queryDay] + "%' and Kategori Like '%"+ regions[this.queryRegion] + "%'";

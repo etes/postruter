@@ -17,11 +17,17 @@
     <link href='//fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//js.arcgis.com/3.14/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="//js.arcgis.com/3.14/esri/css/esri.css">
+    <link rel="stylesheet" href="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="//code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
     <!-- Load any application specific styles -->
     <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body class="claro app-loading">
+
+<div data-role="page" id="main" data-theme="a">
+
     <!-- Loading Indicator -->
     <div class="loading-indicator">
         <div class="loading-message" id="loading_message"></div>
@@ -44,7 +50,7 @@
                         </div>
                     </div>
                     <!-- Buttons -->
-                    <div id="selectRegion">
+                    <!--<div id="selectRegion">
                       <select id="listRegion">
                         <option value="choose" selected="selected">Velg rute ... </option>
                         <option value="1">Rute 1</option>
@@ -61,7 +67,7 @@
                         <option value="4">Torsdag</option>
                         <option value="5">Fredag</option>
                       </select>
-                    </div>
+                    </div>-->
                     <div id="btnLocate"></div>
                     <div id="btnReset" class="btn btnReset"></div>
                 </div>
@@ -97,7 +103,41 @@
 				<!--Tools are created programatically-->
 			</div>
 		</div>
+</div>
 
+  <!--Info Dialog-->
+  <div data-role="dialog" id="landingDialog" data-theme="a" data-close-btn=none>
+  <!--<div id="infoDialog" data-role="dialog" data-theme="a" "data-close-btn=none" data-dismissible="false">-->
+    <div data-role="header">
+      <h1><span>Postruter</span></h1>
+    </div>
+    <div data-role="content">
+        <div id="selectRegion" class="ui-field-contain">
+          <label >Velg Rute:</label>
+          <select id="listRegion">
+            <option value="choose" selected="selected">Velg rute ... </option>
+            <option value="1">Rute 1</option>
+            <option value="2">Rute 2</option>
+            <option value="3">Sentrum</option>
+          </select>
+        </div>
+        <div id="selectDay"  class="ui-field-contain">
+          <label>Velg Dag:</label>
+          <select id="listDay">
+            <option value="choose" selected="selected">Velg dag ... </option>
+            <option value="1">Mandag</option>
+            <option value="2">Tirsdag</option>
+            <option value="3">Onsdag</option>
+            <option value="4">Torsdag</option>
+            <option value="5">Fredag</option>
+          </select>
+        </div>
+    </div>
+    <p><a href="#main" id="btnNext" data-rel="next" class="ui-btn ui-corner-all ui-btn-inline ui-icon-arrow-r ui-btn-icon-right">Neste</a></p>
+  </div>
+
+  <script type="text/javascript">
+  </script>
     <script type="text/javascript">
     var package_path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
     var dojoConfig = {
@@ -135,6 +175,8 @@
             // The config object contains the following properties: helper services, (optionally)
             // i18n, appid, webmap and any custom values defined by the application.
             // In this example we have one called theme.
+
+            $.mobile.changePage("#landingDialog");
             myApp.startup(config);
         }, function(error) {
             // something went wrong. Let's report it.

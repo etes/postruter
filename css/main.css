@@ -7,6 +7,12 @@ body {
     font-family: Lato;
     font-weight: 700;
 }
+main {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
 
 a,
 a:hover,
@@ -599,7 +605,7 @@ select {
     position: absolute;
     width: 100%;
 }
-
+/*
 #selectRegion {
     position: absolute;
     top: 40px;
@@ -611,7 +617,7 @@ select {
     top: 40px;
     left: 130px;
 }
-
+*/
 #btnLocate {
     position: absolute;
     top: 38px;
