@@ -559,14 +559,6 @@ select {
     display: block;
 }
 
-.btnReset {
-    position: absolute;
-    top: 35px;
-    right: 10px;
-    background-image: url('../images/reset.png');
-    background-repeat: no-repeat;
-}
-
 #panelTitle {
     position: absolute;
     left: 10px;
@@ -620,10 +612,18 @@ select {
 */
 #btnLocate {
     position: absolute;
-    top: 38px;
+    top: 13px;
     right: 55px;
     width: 30px;
     height: 30px;
+}
+
+.btnReset {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-image: url('../images/reset.png');
+    background-repeat: no-repeat;
 }
 
 #panelDirections {

@@ -672,8 +672,6 @@ define([
         _zoomToLatLon: function (latlon) {
           xy = proj4(proj4.defs[this._projection]).forward([latlon[1], latlon[0]]);
           var pt = new Point(xy[0], xy[1], this.map.spatialReference);
-          var e = {graphic: null};
-          e.graphic = new Graphic(pt);
           this.map.centerAndZoom(pt, 3);
         },
 
@@ -736,7 +734,7 @@ define([
             on(listRegion, "change", lang.hitch(this, this._selectRegion));
 
             // Next button
-            var dialogNext = dom.byId("listRegion");
+            var dialogNext = dom.byId("btnNext");
             on(btnNext, "click", lang.hitch(this, this._zoomToLatLon([59.22, 10.75])));
         },
 
