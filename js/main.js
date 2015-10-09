@@ -672,7 +672,11 @@ define([
         _zoomToLatLon: function (latlon) {
           xy = proj4(proj4.defs[this._projection]).forward([latlon[1], latlon[0]]);
           var pt = new Point(xy[0], xy[1], this.map.spatialReference);
-          this.map.centerAndZoom(pt, 3);
+          var c = pt;
+          if (this.map.width > 570) {
+              c = pt.offset(this.offset / 2, 0);
+          }
+          this.map.centerAndZoom(c, 4);
         },
 
         _currentLocation: function (location) {
@@ -735,7 +739,7 @@ define([
 
             // Next button
             var dialogNext = dom.byId("btnNext");
-            on(btnNext, "click", lang.hitch(this, this._zoomToLatLon([59.22, 10.75])));
+            on(btnNext, "click", lang.hitch(this, this._zoomToLatLon([59.23, 10.92])));
         },
 
         // Update Theme

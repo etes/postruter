@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Directions</title>
+    <title>Postruter</title>
     <meta charset="utf-8">
     <!-- Define the versions of IE that will be used to render the page. See Microsoft documentation for details. Optional. -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -176,8 +176,9 @@
             // i18n, appid, webmap and any custom values defined by the application.
             // In this example we have one called theme.
 
-            $.mobile.changePage("#landingDialog");
+
             myApp.startup(config);
+            $.mobile.changePage("#landingDialog");
         }, function(error) {
             // something went wrong. Let's report it.
             myApp.reportError(error);
