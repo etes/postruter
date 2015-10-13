@@ -610,6 +610,11 @@ select {
     left: 130px;
 }
 */
+#btnEdit {
+    position: absolute;
+    top: 5px;
+    right: 95px;
+}
 #btnLocate {
     position: absolute;
     top: 13px;
