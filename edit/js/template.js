@@ -242,7 +242,7 @@ array, declare, kernel, lang, Evented, Deferred, string, domClass, all, esriConf
                 oAuthInfo = new ArcGISOAuthInfo({
                     appId: this.config.oauthappid,
                     portalUrl: this.config.sharinghost,
-                    popup: true
+                    popup: false
                 });
                 IdentityManager.registerOAuthInfos([oAuthInfo]);
             }
