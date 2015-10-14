@@ -20,7 +20,7 @@ define({
     //default web map, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
     "appid": "",
     "webmap": "b885e23e4af74fba8a8f6008646a90b9", //"e37d8f3624734cf5ac9b7d6f4eaac75c", //"9569a8b938c746359c1b4aa490476506",
-    "oauthappid": null, //"AFTKRmv16wj14N3z",
+    "oauthappid": "QxKL9vhQVIRoN7z0", //"AFTKRmv16wj14N3z",
     //Group templates must support a group url parameter. This will contain the id of the group.
     //group: "",
     //Enter the url to the proxy if needed by the application. See the 'Using the proxy page' help topic for details
@@ -56,7 +56,26 @@ define({
     "destLayer" : null,
     "destObjectId" : null,
     "distanceUnits": "kilometers", // options: miles or kilometers
-    "defaultZoomLevel" : 13,
+    "defaultZoomLevel" : 10,
+    "basemapgroup": {"id": "de2f7dc193f34833ae2ed1143c133ce9", "title": "Bakgrunnskart-enkelt", "owner": "ermtes"},
+
+    //Set of tools that will be added to the toolbar
+    "tools": [
+        {"name": "legend", "enabled": true},
+        {"name": "bookmarks", "enabled": true},
+        {"name": "layers", "enabled": true},
+        {"name": "basemap", "enabled": true},
+        {"name": "overview", "enabled": false},
+        {"name": "measure", "enabled": false},
+        {"name": "edit", "enabled": true, "toolbar": false},
+        {"name": "print", "enabled": true, "legend": false, "layouts":false, "format":"pdf"},
+        {"name": "details", "enabled": false},
+        {"name": "direction", "enabled": true},
+        {"name": "share", "enabled": false}
+    ],
+    //Set the active tool on the toolbar. Note home and locate can't be the active tool.
+    //Set to "" to display no tools at startup
+    "activeTool": "basemap",
     // **************************** //
 
     // **************************** //

@@ -20,7 +20,7 @@ define({
   //default web map, default app color theme and more. These values can be overwritten by template configuration settings and url parameters.
   "appid": "",
   "webmap": "768752713aa34574b1350cac958b161b",
-  "oauthappid": null, //"AFTKRmv16wj14N3z",
+  "oauthappid": "QxKL9vhQVIRoN7z0", //"AFTKRmv16wj14N3z",
   //Group templates must support a group url parameter. This will contain the id of the group.
   "group": "",
   //Enter the url to the proxy if needed by the application. See the 'Using the proxy page' help topic for details
