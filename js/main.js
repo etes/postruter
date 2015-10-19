@@ -57,8 +57,7 @@ define([
   "esri/symbols/TextSymbol",
   "esri/tasks/locator",
   "esri/tasks/query",
-  "esri/urlUtils",
-  '//cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.3/proj4.js'
+  "esri/urlUtils"
 ], function (
     ready,
     array,
@@ -101,8 +100,7 @@ define([
     TextSymbol,
     Locator,
     Query,
-    urlUtils,
-    proj4
+    urlUtils
     ) {
     return declare(null, {
 
@@ -191,7 +189,7 @@ define([
 
                 window.Proj4js = proj4;
                 //require(['http://spatialreference.org/ref/epsg/' + this.proj4Wkid + '/proj4js/'], lang.hitch(this, function () {
-                require(['js/25832.js'], lang.hitch(this, function () {
+                require(['js/libs/25832.js'], lang.hitch(this, function () {
                   this._projectionLoaded = true;
                   this._projection = 'EPSG' + ':' + this.proj4Wkid;
                 }));
@@ -429,7 +427,7 @@ define([
         _processOperationalLayers: function () {
             if (this.config.destLayer) {
                 array.forEach(this.opLayers, lang.hitch(this, function (layer) {
-                    console.log(layer, this.config.destLayer.id);
+                    //console.log(layer, this.config.destLayer.id);
                     if ((layer.featureCollection) && (layer.id + "_0" == this.config.destLayer.id)) {
                         this.config.destLayer.title = layer.title;
                         this.opLayerObj = layer;
@@ -807,7 +805,9 @@ define([
             var gra;
             var pt;
             if (evt.graphic) {
-                pt = evt.graphic.geometry;
+                //pt = evt.graphic.geometry;
+                //console.log(pt);
+                pt = new Point(610713.0572170113, 6565383.429220954, this.map.spatialReference);
                 this.locator.locationToAddress(pt, 500, lang.hitch(this, function (result) {
                     if (result.address) {
                         var label = result.address.Address;
@@ -829,7 +829,9 @@ define([
             } else {
                 if (evt.error) console.log(evt.error.message);
             }
-            this._updateOrigin(gra, pt);
+            var sym = new PictureMarkerSymbol("images/start.png", 24, 24);
+            var gra = new Graphic(pt, sym);
+            this._updateOrigin(gra, gra);
         },
 
         _locationError: function (error) {
@@ -889,7 +891,6 @@ define([
             }
 
             var expr = "Dag Like '%"+ weekdays[this.queryDay] + "%' and Kategori Like '%"+ regions[this.queryRegion] + "%'";
-            console.log(expr);
 
             var query = new Query();
             query.returnGeometry = true;
@@ -898,6 +899,31 @@ define([
             //query.geometry = this.map.extent;
             query.outFields = ["*"];
             this.opLayer.queryFeatures(query, lang.hitch(this, this._processResults), lang.hitch(this, this._processError));
+            exprRoute = "Name Like '%"+ weekdays[this.queryDay] + "_"+ regions[this.queryRegion] + "%'";
+            var queryRoute = new Query();
+            queryRoute.returnGeometry = true;
+            queryRoute.where = exprRoute;
+            queryRoute.outFields = ["*"];
+            var routeLayer = this.opLayers[1].layerObject;
+            routeLayer.queryFeatures(queryRoute, lang.hitch(this, this._processRouteResults), lang.hitch(this, this._processError));
+        },
+
+        // Process Results
+        _processRouteResults: function (results) {
+            this.routeFeatures = [];
+            this.map.graphics.clear();
+            var rgb = Color.fromString(this.color).toRgb();
+            //var symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.5]), 4);
+            array.forEach(results.features, lang.hitch(this, function (gra) {
+                if (gra.geometry) {
+                  gra.symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.4]), 3);;
+                  this.map.graphics.add(gra);
+                  this.routeFeatures.push(gra);
+                }
+            }));
+            this.routeFeatures = results.features;
+
+
         },
 
         // Process Results
