@@ -678,7 +678,8 @@ define([
         },
 
         _currentLocation: function (location) {
-          xy = proj4(proj4.defs[this._projection]).forward([location.coords.longitude, location.coords.latitude]);
+          //xy = proj4(proj4.defs[this._projection]).forward([location.coords.longitude, location.coords.latitude]);
+          xy = proj4(proj4.defs[this._projection]).forward([59.23, 10.92]); //use static location instead of gps
           var pt = new Point(xy[0], xy[1], this.map.spatialReference);
           var e = {graphic: null};
           e.graphic = new Graphic(pt);
