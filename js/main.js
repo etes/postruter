@@ -554,13 +554,13 @@ define([
         _configureMapUI: function () {
 
             // geolocate
-            var geoLocate = new LocateButton({
+            /*var geoLocate = new LocateButton({
                 map: this.map,
                 autoNavigate: false,
                 highlightLocation: false
             }, "btnLocate");
             on(geoLocate, "locate", lang.hitch(this, this._geoLocated));
-            geoLocate.startup();
+            geoLocate.startup();*/
 
             // geocoder
             var geocoderOptions = this._createGeocoderOptions();
@@ -679,7 +679,7 @@ define([
 
         _currentLocation: function (location) {
           //xy = proj4(proj4.defs[this._projection]).forward([location.coords.longitude, location.coords.latitude]);
-          xy = proj4(proj4.defs[this._projection]).forward([59.23, 10.92]); //use static location instead of gps
+          xy = proj4(proj4.defs[this._projection]).forward([10.939209721923158, 59.213032054228314]); //use static location instead of gps
           var pt = new Point(xy[0], xy[1], this.map.spatialReference);
           var e = {graphic: null};
           e.graphic = new Graphic(pt);
@@ -1123,12 +1123,17 @@ define([
           var longitude = latlon[1];
 
           // If it's an iPad, iPhone etc..
-          if( (navigator.platform.indexOf("iPad") != -1)
+          /*if( (navigator.platform.indexOf("iPad") != -1)
               || (navigator.platform.indexOf("iPhone") != -1)
-              || (navigator.platform.indexOf("iPod") != -1))
+              || (navigator.platform.indexOf("iPod") != -1)) {
               window.open('http://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
-          else
+          }*/
+          if (navigator.userAgent.indexOf('Safari') != -1) {
+            window.open('maps://maps.apple.com/maps?daddr=' + latitude + ',' + longitude + '&amp;dirflg=d');
+          }
+          else {
               window.open('http://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
+          }
         },
 
         // Show Route
