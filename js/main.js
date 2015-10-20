@@ -904,8 +904,6 @@ define([
             queryRoute.outFields = ["*"];
             var routeLayer = this.opLayers[1].layerObject;
             routeLayer.queryFeatures(queryRoute, lang.hitch(this, this._processRouteResults), lang.hitch(this, this._processError));
-
-            this._zoomToLatLon([59.23, 10.92]);
         },
 
         // Process Results
@@ -917,10 +915,11 @@ define([
                 if (gra.geometry) {
                   gra.symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.4]), 3);;
                   this.map.graphics.add(gra);
+                  this.map.setExtent(gra.geometry.getExtent());
                   this.routeFeatures.push(gra);
                 }
             }));
-            this.routeFeatures = results.features;
+            //this.routeFeatures = results.features;
 
 
         },
