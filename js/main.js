@@ -765,7 +765,7 @@ define([
         _selectRegion: function (e) {
           var value = e.currentTarget.value;
           this.queryRegion = value;
-          colors = {"choose": "#006190", 1: "#0055FF", 2: "#900000", 3: "#009000"}
+          colors = {"choose": "#006190", 1: "#0277BD", 2: "#C62828", 3: "#009065"}
           this.color = colors[value];
           this._setColor;
         },
@@ -880,7 +880,7 @@ define([
         _queryDestinations: function () {
 
             weekdays = {"choose": "", 1: "Mandag", 2: "Tirsdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag"};
-            regions = {"choose": "", 1: "Blå", 2: "Rød", 3: "Sentrum"};
+            routes = {"choose": "", 1: "Blå", 2: "Rød", 3: "Sentrum"};
             if (!this.queryRegion) {
               this.queryRegion = "choose";
             }
@@ -888,7 +888,9 @@ define([
               this.queryDay = "choose";
             }
 
-            var expr = "Dag Like '%"+ weekdays[this.queryDay] + "%' and Kategori Like '%"+ regions[this.queryRegion] + "%'";
+            dojo.byId('panelSubtitle').innerHTML = weekdays[this.queryDay] + ' ' + routes[this.queryRegion] + ' Rute';
+
+            var expr = "Dag Like '%"+ weekdays[this.queryDay] + "%' and Kategori Like '%"+ routes[this.queryRegion] + "%'";
 
             var query = new Query();
             query.returnGeometry = true;
@@ -897,7 +899,7 @@ define([
             //query.geometry = this.map.extent;
             query.outFields = ["*"];
             this.opLayer.queryFeatures(query, lang.hitch(this, this._processResults), lang.hitch(this, this._processError));
-            exprRoute = "Name Like '%"+ weekdays[this.queryDay] + "_"+ regions[this.queryRegion] + "%'";
+            exprRoute = "Name Like '%"+ weekdays[this.queryDay] + "_"+ routes[this.queryRegion] + "%'";
             var queryRoute = new Query();
             queryRoute.returnGeometry = true;
             queryRoute.where = exprRoute;
