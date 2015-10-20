@@ -915,10 +915,11 @@ define([
                 if (gra.geometry) {
                   gra.symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.4]), 3);;
                   this.map.graphics.add(gra);
-                  this.map.setExtent(gra.geometry.getExtent());
                   this.routeFeatures.push(gra);
                 }
             }));
+
+            this._zoomToLatLon([59.213007768308884, 10.938806241493825]);
             //this.routeFeatures = results.features;
 
 
