@@ -116,8 +116,6 @@ define([
         opFeatures: [],
         hiLayer: null,
         destLayer: null,
-        queryDay: null,
-        queryRegion: null,
         origin: null,
         originObj: null,
         geocoder: null,
@@ -135,6 +133,8 @@ define([
         _projection: null,
         _projectionLoaded: false,
         watchId: null,
+        queryDay: null,
+        queryRegion: null,
 
         // Startup
         startup: function (config) {
@@ -328,7 +328,8 @@ define([
                 this.initExt = this.map.extent;
                 this.opLayers = response.itemInfo.itemData.operationalLayers;
 
-                on(this.map, "click", lang.hitch(this, this._mapClickHandler));
+                // Disable map click handler (uses clicked position as start point): 251020
+                //on(this.map, "click", lang.hitch(this, this._mapClickHandler));
 
                 // hi layer
                 this.hiLayer = new GraphicsLayer();
@@ -452,11 +453,11 @@ define([
                 this.opLayer = this._getDefaultOperationalLayer();
             }
             this._setupTemplate();
-            if (this.opFeatureLayer) {
+            /*if (this.opFeatureLayer) {
                 this._queryDestinations();
             } else {
                 this._processDestinationFeatures();
-            }
+            }*/
         },
 
         // get default operational layer
@@ -684,7 +685,7 @@ define([
           var e = {graphic: null};
           e.graphic = new Graphic(pt);
           this._geoLocated(e);
-          //this.map.centerAndZoom(pt, 8);
+          this.map.centerAndZoom(pt, 8);
         },
 
         // Configure UI
@@ -738,7 +739,7 @@ define([
 
             // Next button
             var dialogNext = dom.byId("btnNext");
-            on(btnNext, "click", lang.hitch(this, this._zoomToLatLon([59.23, 10.92])));
+            on(dialogNext, "click", lang.hitch(this, this._queryDestinations));
         },
 
         // Update Theme
@@ -758,8 +759,6 @@ define([
         _selectDay: function (e) {
           var value = e.currentTarget.value;
           this.queryDay = value;
-          this._queryDestinations();
-          this._processDestinationFeatures();
         },
 
         // Select Region
@@ -769,8 +768,6 @@ define([
           colors = {"choose": "#006190", 1: "#0055FF", 2: "#900000", 3: "#009000"}
           this.color = colors[value];
           this._setColor;
-          this._queryDestinations();
-          this._processDestinationFeatures();
         },
 
         // Close Directions
@@ -907,6 +904,8 @@ define([
             queryRoute.outFields = ["*"];
             var routeLayer = this.opLayers[1].layerObject;
             routeLayer.queryFeatures(queryRoute, lang.hitch(this, this._processRouteResults), lang.hitch(this, this._processError));
+
+            this._zoomToLatLon([59.23, 10.92]);
         },
 
         // Process Results
@@ -914,7 +913,6 @@ define([
             this.routeFeatures = [];
             this.map.graphics.clear();
             var rgb = Color.fromString(this.color).toRgb();
-            //var symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.5]), 4);
             array.forEach(results.features, lang.hitch(this, function (gra) {
                 if (gra.geometry) {
                   gra.symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.4]), 3);;
