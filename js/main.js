@@ -135,6 +135,8 @@ define([
         watchId: null,
         queryDay: null,
         queryRegion: null,
+        weekdays: {"choose": "", 1: "Mandag", 2: "Tirsdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag"},
+        routes: {"choose": "", 1: "Blå", 2: "Rød", 3: "Sentrum"},
 
         // Startup
         startup: function (config) {
@@ -453,11 +455,6 @@ define([
                 this.opLayer = this._getDefaultOperationalLayer();
             }
             this._setupTemplate();
-            /*if (this.opFeatureLayer) {
-                this._queryDestinations();
-            } else {
-                this._processDestinationFeatures();
-            }*/
         },
 
         // get default operational layer
@@ -684,7 +681,7 @@ define([
           var pt = new Point(xy[0], xy[1], this.map.spatialReference);
           var e = {graphic: null};
           e.graphic = new Graphic(pt);
-          this._geoLocated(e);
+          //this._geoLocated(e);
           this.map.centerAndZoom(pt, 8);
         },
 
@@ -879,8 +876,6 @@ define([
         // Query Destinations
         _queryDestinations: function () {
 
-            weekdays = {"choose": "", 1: "Mandag", 2: "Tirsdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag"};
-            routes = {"choose": "", 1: "Blå", 2: "Rød", 3: "Sentrum"};
             if (!this.queryRegion) {
               this.queryRegion = "choose";
             }
@@ -888,9 +883,10 @@ define([
               this.queryDay = "choose";
             }
 
-            dojo.byId('panelSubtitle').innerHTML = weekdays[this.queryDay] + ' ' + routes[this.queryRegion] + ' Rute';
+            // Add subtitle based on selected day and route
+            dojo.byId('panelSubtitle').innerHTML = this.weekdays[this.queryDay] + ' ' + this.routes[this.queryRegion] + ' Rute';
 
-            var expr = "Dag Like '%"+ weekdays[this.queryDay] + "%' and Kategori Like '%"+ routes[this.queryRegion] + "%'";
+            var expr = "Dag Like '%"+ this.weekdays[this.queryDay] + "%' and Kategori Like '%"+ this.routes[this.queryRegion] + "%'";
 
             var query = new Query();
             query.returnGeometry = true;
@@ -899,7 +895,9 @@ define([
             //query.geometry = this.map.extent;
             query.outFields = ["*"];
             this.opLayer.queryFeatures(query, lang.hitch(this, this._processResults), lang.hitch(this, this._processError));
-            exprRoute = "Name Like '%"+ weekdays[this.queryDay] + "_"+ routes[this.queryRegion] + "%'";
+
+            // Query route service and return selected route
+            exprRoute = "Name Like '%"+ this.weekdays[this.queryDay] + "_"+ this.routes[this.queryRegion] + "%'";
             var queryRoute = new Query();
             queryRoute.returnGeometry = true;
             queryRoute.where = exprRoute;
@@ -920,7 +918,6 @@ define([
                   this.routeFeatures.push(gra);
                 }
             }));
-
             this._zoomToLatLon([59.213007768308884, 10.938806241493825]);
             //this.routeFeatures = results.features;
 
@@ -944,7 +941,7 @@ define([
             console.log(err.message);
         },
 
-        _toLatLong: function (pnt) {
+        _toLatLon: function (pnt) {
             return proj4(proj4.defs[this._projection]).inverse([pnt.x, pnt.y]);
         },
 
@@ -954,20 +951,25 @@ define([
                 var geom = gra.geometry;
                 var pt = geom;
                 if (geom.type != "point") pt = this._getPointForGeometry(geom);
+
+                //in order to sort by sequence in the precalculated route
+                var sequenceField = (this.weekdays[this.queryDay] + "_"+ this.routes[this.queryRegion]).toUpperCase();
+                gra.attributes.SEQUENCE = gra.attributes[sequenceField];
+
                 var dist = null;
                 dist = this._getDistance(pt);
 
                 if(this._projectionLoaded) {
-                  lonlat = this._toLatLong(pt);
+                  lonlat = this._toLatLon(pt);
                   gra.attributes.LATITUDE = lonlat[1];
                   gra.attributes.LONGITUDE = lonlat[0];
                 }
                 gra.attributes.POINT_LOCATION = pt;
                 gra.attributes.DISTANCE = dist;
                 gra.setInfoTemplate(this.infoTemplate);
-                //console.log(gra);
             }));
-            this.opFeatures.sort(this._compareDistance);
+            //this.opFeatures.sort(this._compareDistance);
+            this.opFeatures.sort(this._compareSequence);
             this._updateDestinations();
         },
 
@@ -1032,7 +1034,8 @@ define([
                 }
 
                 // route
-                var tip = "Directions";
+                // Disable directions widget 20151021
+                /*var tip = "Directions";
                 if (this.config && this.config.i18n) {
                     tip = this.config.i18n.tooltips.directions;
                 }
@@ -1043,7 +1046,7 @@ define([
                     domClass.add(recRoute, 'recRoute');
                     recRoute.select = lang.hitch(this, this._selectRoute);
                     on(recRoute, "click", lang.partial(recRoute.select, i));
-                }
+                }*/
 
                 //body
                 var recBody = domConstruct.create("div", {
@@ -1199,7 +1202,7 @@ define([
             var symF = new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID, symL, new Color([255, 255, 255, 0.4]));
             var fnt = new Font();
             fnt.family = "Arial";
-            fnt.size = "10px";
+            fnt.size = "11px";
             for (var i = 0; i < this.opFeatures.length; i++) {
                 var num = i + 1;
                 var gra = this.opFeatures[i];
@@ -1241,6 +1244,12 @@ define([
             return dist;
         },
 
+        // Compare route sequence
+        _compareSequence: function (a, b) {
+            if (a.attributes.SEQUENCE < b.attributes.SEQUENCE) return -1;
+            if (a.attributes.SEQUENCE > b.attributes.SEQUENCE) return 1;
+            return 0;
+        },
         // Compare distance
         _compareDistance: function (a, b) {
             if (a.attributes.DISTANCE < b.attributes.DISTANCE) return -1;
