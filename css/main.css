@@ -811,24 +811,24 @@ select {
 
 .recNavigate {
     float: left;
-    margin: 20px 0 5px -50px;
-    width: 30px;
-    height: 30px;
-    background-image: url('../images/navigationGoogle.png');
+    margin: 5px 0 5px 0px;
+    width: 40px;
+    height: 40px;
+    background-image: url('../images/navigationGoogle-40.png');
     background-repeat: no-repeat;
     background-position: center center;
     cursor: pointer;
 }
-.recRoute {
+/*.recRoute {
     float: left;
-    margin: 20px 0 5px 0;
+    margin: 20px 0 5px -50px;
     width: 30px;
     height: 30px;
     background-image: url('../images/route.png');
     background-repeat: no-repeat;
     background-position: center center;
     cursor: pointer;
-}
+}*/
 
 .recBody {
     float: left;
