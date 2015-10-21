@@ -9,6 +9,13 @@
   height: 44px;
 /*border-bottom: 1px solid #ddd;*/
 }
+
+#cp_left{
+  display: none;
+}
+.atiButtons {
+  display: none;
+}
 .esriRTL .top-bar {
   left: auto;
   right: 0;
