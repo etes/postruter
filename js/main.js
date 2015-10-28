@@ -57,8 +57,7 @@ define([
   "esri/symbols/TextSymbol",
   "esri/tasks/locator",
   "esri/tasks/query",
-  "esri/urlUtils",
-  "application/libs/DirectionalLineSymbol"
+  "esri/urlUtils"
 ], function (
     ready,
     array,
@@ -101,8 +100,7 @@ define([
     TextSymbol,
     Locator,
     Query,
-    urlUtils,
-    DirectionalLineSymbol
+    urlUtils
     ) {
     return declare(null, {
 
@@ -137,8 +135,8 @@ define([
         watchId: null,
         queryDay: null,
         queryRegion: null,
-        weekdays: {"choose": "", 1: "Mandag", 2: "Tirsdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag"},
-        routes: {"choose": "", 1: "Blå", 2: "Rød", 3: "Sentrum"},
+        weekdays: {"choose": null, 1: "Mandag", 2: "Tirsdag", 3: "Onsdag", 4: "Torsdag", 5: "Fredag"},
+        routes: {"choose": null, 1: "Blå", 2: "Rød", 3: "Sentrum"},
 
         // Startup
         startup: function (config) {
@@ -878,13 +876,6 @@ define([
         // Query Destinations
         _queryDestinations: function () {
 
-            if (!this.queryRegion) {
-              this.queryRegion = "choose";
-            }
-            if (!this.queryDay) {
-              this.queryDay = "choose";
-            }
-
             // Add subtitle based on selected day and route
             dojo.byId('panelSubtitle').innerHTML = this.weekdays[this.queryDay] + ' ' + this.routes[this.queryRegion] + ' Rute';
 
@@ -913,36 +904,35 @@ define([
             this.routeFeatures = [];
             this.map.graphics.clear();
             var rgb = Color.fromString(this.color).toRgb();
-            //add a basic polyline
-                    var basicOptions = {
-                        style: SimpleLineSymbol.STYLE_SOLID,
-                        color: new Color([rgb[0], rgb[1], rgb[2], 0.4]),
-                        width: 3,
-                        directionScale: 0.6,
-                        directionStyle: "doublePointer",
-                        directionPixelBuffer: 40
-                    };
-            //add a polyline with 3 paths
-                    var advOptions = {
-                        style: SimpleLineSymbol.STYLE_SOLID,
-                        color: new Color([rgb[0], rgb[1], rgb[2], 0.4]),
-                        width: 3,
-                        directionStyle: "arrow1",
-                        directionPixelBuffer: 8,
-                        directionColor: new Color([rgb[0], rgb[1], rgb[2], 0.8]),
-                        directionScale: 1
-                    };
+
             array.forEach(results.features, lang.hitch(this, function (gra) {
                 if (gra.geometry) {
-                  //gra.symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.4]), 3);
-                  var graphicsLayer = new GraphicsLayer({ id: "graphicsLayer" });
-                  this.map.addLayer(graphicsLayer);
-                  gra.symbol = new DirectionalLineSymbol(advOptions);
-
-                  graphicsLayer.add(gra);
-                  gra.symbol.animateDirection("Infinity", 20);
-                  //this.map.graphics.add(gra);
+                  gra.symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.4]), 3);
+                  this.map.graphics.add(gra);
                   this.routeFeatures.push(gra);
+
+                  var ext = gra.geometry.getExtent();
+                  var ext2 = lang.clone(ext);
+                  if (this.map.width > 570) {
+                      var offset = ext.getWidth() * 320 / this.map.width;
+                      ext2.update(ext.xmin, ext.ymin, ext.xmax + offset, ext.ymax, ext.spatialReference);
+                  }
+                  this.map.setExtent(ext2.expand(2));
+
+                  rgb.push(0);
+                  var symL = new SimpleLineSymbol(SimpleLineSymbol.STYLE_NULL, new Color.fromArray(rgb), 0);
+                  var sym = new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 20, symL, Color.fromArray(rgb));
+                  var pt = gra.geometry.getPoint(0, 0);
+                  if (this.trackingPt) this.map.graphics.remove(this.trackingPt);
+                  this.trackingPt = new TrackingPt(pt, sym, {
+                      color: this.color,
+                      route: gra.geometry
+                  });
+
+                  this.map.graphics.add(this.trackingPt);
+                  setTimeout(lang.hitch(this, function () {
+                      this.trackingPt.updateSymbol();
+                  }), 200);
                 }
             }));
             //this._zoomToLatLon([59.213007768308884, 10.938806241493825]);
