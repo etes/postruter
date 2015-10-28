@@ -1,23 +1,23 @@
 define([
-    'dojo/_base/declare', 
-    'dojo/_base/Color', 
+    'dojo/_base/declare',
+    'dojo/_base/Color',
     'dojo/_base/fx',
     'dojox/gfx/fx',
     'esri/geometry/geodesicUtils',
-    'esri/graphic', 
-    'esri/symbols/SimpleMarkerSymbol', 
+    'esri/graphic',
+    'esri/symbols/SimpleMarkerSymbol',
     'esri/symbols/SimpleLineSymbol'
 ], function(
-    declare, 
-    Color, 
+    declare,
+    Color,
     fx,
     gfxFx,
     geodesicUtils,
-    Graphic, 
-    SimpleMarkerSymbol, 
+    Graphic,
+    SimpleMarkerSymbol,
     SimpleLineSymbol
 ) {
-   
+
    var trackingPt = declare('TrackingPt', [Graphic], {
 
       constructor : function() {
@@ -50,7 +50,7 @@ define([
             anim.play();
          }
       },
-      
+
       fadeIn : function() {
          var delay = this.delay;
          var rgb = Color.fromString(this.attributes.color).toRgb();
@@ -119,7 +119,7 @@ define([
          var count = route.paths[0].length;
          var anim = new fx.Animation({
             node : this,
-            duration : 1000,
+            duration : 3000,
             curve : [0, count - 1],
             onAnimate : function(v) {
                var i = parseInt(v);
@@ -141,7 +141,7 @@ define([
          this.sizeIn();
          this.fadeIn();
       }
-      
+
    });
 
    return trackingPt;
