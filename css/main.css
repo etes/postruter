@@ -303,13 +303,13 @@ select {
 .logo-med {
     position: absolute;
     left: 0px;
-    bottom: 0px;
+    bottom: -50px;
 }
 
 .logo-sm {
     position: absolute;
     left: 0px;
-    bottom: 0px;
+    bottom: -50px;
 }
 
 .esriAttribution {
@@ -751,7 +751,7 @@ select {
     text-align: left;
     font-size: 12px;
     line-height: 14px;
-    color: #6e6e6e;
+    color: #565656;
     display: block;
     transition: 0.2s linear;
     -webkit-transition: 0.2s linear;
