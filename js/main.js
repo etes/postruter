@@ -57,7 +57,8 @@ define([
   "esri/symbols/TextSymbol",
   "esri/tasks/locator",
   "esri/tasks/query",
-  "esri/urlUtils"
+  "esri/urlUtils",
+  "application/libs/DirectionalLineSymbol"
 ], function (
     ready,
     array,
@@ -100,7 +101,8 @@ define([
     TextSymbol,
     Locator,
     Query,
-    urlUtils
+    urlUtils,
+    DirectionalLineSymbol
     ) {
     return declare(null, {
 
@@ -911,14 +913,39 @@ define([
             this.routeFeatures = [];
             this.map.graphics.clear();
             var rgb = Color.fromString(this.color).toRgb();
+            //add a basic polyline
+                    var basicOptions = {
+                        style: SimpleLineSymbol.STYLE_SOLID,
+                        color: new Color([rgb[0], rgb[1], rgb[2], 0.4]),
+                        width: 3,
+                        directionScale: 0.6,
+                        directionStyle: "doublePointer",
+                        directionPixelBuffer: 40
+                    };
+            //add a polyline with 3 paths
+                    var advOptions = {
+                        style: SimpleLineSymbol.STYLE_SOLID,
+                        color: new Color([rgb[0], rgb[1], rgb[2], 0.4]),
+                        width: 3,
+                        directionStyle: "arrow1",
+                        directionPixelBuffer: 8,
+                        directionColor: new Color([rgb[0], rgb[1], rgb[2], 0.8]),
+                        directionScale: 1
+                    };
             array.forEach(results.features, lang.hitch(this, function (gra) {
                 if (gra.geometry) {
-                  gra.symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.4]), 3);;
-                  this.map.graphics.add(gra);
+                  //gra.symbol = new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID, new Color([rgb[0], rgb[1], rgb[2], 0.4]), 3);
+                  var graphicsLayer = new GraphicsLayer({ id: "graphicsLayer" });
+                  this.map.addLayer(graphicsLayer);
+                  gra.symbol = new DirectionalLineSymbol(advOptions);
+
+                  graphicsLayer.add(gra);
+                  gra.symbol.animateDirection("Infinity", 20);
+                  //this.map.graphics.add(gra);
                   this.routeFeatures.push(gra);
                 }
             }));
-            this._zoomToLatLon([59.213007768308884, 10.938806241493825]);
+            //this._zoomToLatLon([59.213007768308884, 10.938806241493825]);
             //this.routeFeatures = results.features;
 
 
@@ -1126,14 +1153,14 @@ define([
           var longitude = latlon[1];
 
           // If it's an iPad, iPhone etc..
-          /*if( (navigator.platform.indexOf("iPad") != -1)
+          if( (navigator.platform.indexOf("iPad") != -1)
               || (navigator.platform.indexOf("iPhone") != -1)
               || (navigator.platform.indexOf("iPod") != -1)) {
               window.open('http://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
-          }*/
+          }/*
           if (this._browser() == "Safari") {
             window.open('maps://maps.apple.com/maps?daddr=' + latitude + ',' + longitude + '&amp;dirflg=d');
-          }
+          }*/
           else {
               window.open('http://maps.google.com/maps?daddr=' + latitude + ',' + longitude + '&amp;ll=');
           }
